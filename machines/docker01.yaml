@@ -1,0 +1,7 @@
+variant: flatcar
+version: 1.0.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZUx5BkGBkx66vm7kdAVbjpd2PvfabaVh1ueYljqGDfBEdQuCWbvfO8MT4Ctab3h4ywN1/g+QHK2SM5mTjnPpYZCH/dTaOODqRyABMR1zZq5TktYYQHgMkvI5/NPqTu13b0fwn9PEG29wEQVgb7BZ6Je3LgPi/PoBB1Rr2kzyIe566GJfwSkM1728dkM9yCNdrPDZ/s4IISY1peq6wtwHl6AGVMVWkYdDgxlgacqoh0gSpw7oWzmOLo3d8Foz8cG1cVQtg3qoU9XHd8+3hc7PBQEirYrbDhkrYCeoZnZeZ3bKuwN0dPWEkAM85eNFSVmyhwEEUyPNg1GHN/9xOoLRf
