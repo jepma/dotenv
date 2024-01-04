@@ -5,3 +5,56 @@ passwd:
     - name: core
       ssh_authorized_keys:
         - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZUx5BkGBkx66vm7kdAVbjpd2PvfabaVh1ueYljqGDfBEdQuCWbvfO8MT4Ctab3h4ywN1/g+QHK2SM5mTjnPpYZCH/dTaOODqRyABMR1zZq5TktYYQHgMkvI5/NPqTu13b0fwn9PEG29wEQVgb7BZ6Je3LgPi/PoBB1Rr2kzyIe566GJfwSkM1728dkM9yCNdrPDZ/s4IISY1peq6wtwHl6AGVMVWkYdDgxlgacqoh0gSpw7oWzmOLo3d8Foz8cG1cVQtg3qoU9XHd8+3hc7PBQEirYrbDhkrYCeoZnZeZ3bKuwN0dPWEkAM85eNFSVmyhwEEUyPNg1GHN/9xOoLRf
+systemd:
+  units:
+    - name: docker-tcp.socket
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Docker Socket for the API
+
+        [Socket]
+        ListenStream=2375
+        BindIPv6Only=both
+        Service=docker.service
+
+        [Install]
+        WantedBy=sockets.target
+    - name: nginx.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=NGINX example
+        After=docker.service
+        Requires=docker.service
+        [Service]
+        TimeoutStartSec=0
+        ExecStartPre=-/usr/bin/docker rm --force nginx1
+        ExecStart=/usr/bin/docker run --name nginx1 --pull always --log-driver=journald --net host docker.io/nginx:1
+        ExecStop=/usr/bin/docker stop nginx1
+        Restart=always
+        RestartSec=5s
+        [Install]
+        WantedBy=multi-user.target   
+storage:
+  files:
+    - path: /opt/file
+      contents:
+        inline: Hello, world!
+      mode: 0644
+      user:
+        id: 500
+      group:
+        id: 501
+    - path: /etc/systemd/network/static.network
+      contents:
+        inline: |
+          [Match]
+          Name=enp0s31f6
+
+          [Network]
+          DHCP=no
+          DNS=192.168.88.1
+          DNS=8.8.8.8
+          Address=192.168.88.198/24
+          Gateway=192.168.88.1
